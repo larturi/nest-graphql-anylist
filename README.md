@@ -2,21 +2,41 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## Anylist with Nest & GraphQL
+# AnylistAPI with Nest & GraphQL
 
-## Installation
+# Dev
 
-```bash
-$ yarn install
-```
-
-## Running the app
+### Install dependencies
 
 ```bash
-$ yarn start:dev
+yarn install
 ```
+
+### Create .env file with .env.template as a template
+
+```bash
+docker-compose up -d
+```
+
+### Run Docker Container with PostgresDB Image
+
+```bash
+docker-compose up -d
+```
+
+### Running the app
+
+```bash
+yarn start:dev
+```
+
+### Open in ApolloGraphQL Studio
+
+<http://localhost:3000/graphql>
+
+<br/>
+
+---
 
 ##### Made with ❤️ by Leandro Arturi
