@@ -4,19 +4,19 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity({ name: 'items' })
 @ObjectType()
 export class Item {
-  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
   id: string;
 
-  @Field(() => String)
   @Column()
+  @Field(() => String)
   name: string;
 
-  @Field(() => Float)
   @Column()
+  @Field(() => Float)
   quantity: number;
 
-  @Field(() => String)
-  @Column()
-  quantityUnits: string;
+  @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
+  quantityUnits?: string;
 }
