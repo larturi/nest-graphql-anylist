@@ -29,7 +29,6 @@ export class UsersService {
       return await this.usersRepository.save(newUser);
     } catch (error) {
       this.handleDBErrors(error);
-      throw new BadRequestException('Algui salio mal');
     }
   }
 
@@ -37,8 +36,15 @@ export class UsersService {
     return [];
   }
 
-  findOne(id: string): Promise<User> {
-    throw new Error('Not implemented ' + id);
+  async findOneByEmail(email: string): Promise<User> {
+    try {
+      return await this.usersRepository.findOneByOrFail({ email });
+    } catch (error) {
+      this.handleDBErrors({
+        code: 'err-001',
+        detail: 'Email / Password do not match',
+      });
+    }
   }
 
   block(id: string): Promise<User> {
@@ -47,6 +53,10 @@ export class UsersService {
 
   private handleDBErrors(error: any): never {
     if ((error.code = '23505')) {
+      throw new BadRequestException(error.detail.replace('Key ', ''));
+    }
+
+    if ((error.code = 'err-001')) {
       throw new BadRequestException(error.detail.replace('Key ', ''));
     }
 
