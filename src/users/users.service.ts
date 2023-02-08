@@ -47,6 +47,17 @@ export class UsersService {
     }
   }
 
+  async findOneById(id: string): Promise<User> {
+    try {
+      return await this.usersRepository.findOneByOrFail({ id });
+    } catch (error) {
+      this.handleDBErrors({
+        code: 'err-002',
+        detail: 'Id not found',
+      });
+    }
+  }
+
   block(id: string): Promise<User> {
     throw new Error('Not implemented ' + id);
   }
