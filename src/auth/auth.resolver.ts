@@ -6,8 +6,9 @@ import { AuthResponse } from './types/auth-response.type';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { ValidRoles } from './enums/valid-roles.enum';
 
-@Resolver()
+@Resolver(() => AuthResolver)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
@@ -27,7 +28,7 @@ export class AuthResolver {
 
   @Query(() => AuthResponse, { name: 'revalidate' })
   @UseGuards(JwtAuthGuard)
-  revalidateToken(@CurrentUser() user: User): AuthResponse {
+  revalidateToken(@CurrentUser([ValidRoles.user]) user: User): AuthResponse {
     return this.authService.revalidateToken(user);
   }
 }
