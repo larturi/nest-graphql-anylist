@@ -1,25 +1,47 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { join } from 'path';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloDriver } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-
 import { ItemsModule } from './items/items.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtService } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
 
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: false,
-      plugins: [ApolloServerPluginLandingPageLocalDefault],
+      imports: [AuthModule],
+      inject: [JwtService],
+      useFactory: async (jwtService: JwtService) => ({
+        playground: false,
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        plugins: [ApolloServerPluginLandingPageLocalDefault],
+        context({ req }) {
+          // Con estas validaciones solo puede ver los metodos si se esta autenticado
+          // pero choca con los metodos login y signup que deberian ser publicos
+          // const token = req.headers.authorization?.replace('Bearer ', '');
+          // if (!token) throw Error('Token needed');
+          // const payload = jwtService.decode(token);
+          // if (!payload) throw Error('Token needed');
+        },
+      }),
     }),
+
+    // Asi es para cargarlo de manera sincrona
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   driver: ApolloDriver,
+    //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    //   playground: false,
+    //   plugins: [ApolloServerPluginLandingPageLocalDefault],
+    // }),
 
     TypeOrmModule.forRoot({
       type: 'postgres',
