@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { SignupInput } from '../auth/dto/inputs/signup.input';
 import { User } from './entities/user.entity';
 import { ValidRoles } from '../auth/enums/valid-roles.enum';
+import { UpdateItemInput } from '../items/dto/inputs';
 
 @Injectable()
 export class UsersService {
@@ -67,6 +68,24 @@ export class UsersService {
         code: 'err-002',
         detail: 'Id not found',
       });
+    }
+  }
+
+  async update(
+    id: string,
+    updateUserInput: UpdateItemInput,
+    updateBy: User,
+  ): Promise<User> {
+    try {
+      const user = await this.usersRepository.preload({
+        ...updateUserInput,
+        id,
+      });
+
+      user.lastUpdateBy = updateBy;
+      return await this.usersRepository.save(user);
+    } catch (error) {
+      this.handleDBErrors(error);
     }
   }
 
