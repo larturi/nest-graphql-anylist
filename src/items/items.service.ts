@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateItemInput, CreateItemInput } from './dto/inputs';
 import { Item } from './entities/item.entity';
@@ -11,8 +12,11 @@ export class ItemsService {
     private readonly itemsRepository: Repository<Item>,
   ) {}
 
-  async create(createItemInput: CreateItemInput): Promise<Item> {
-    const newItem = this.itemsRepository.create(createItemInput);
+  async create(createItemInput: CreateItemInput, user: User): Promise<Item> {
+    const newItem = this.itemsRepository.create({
+      ...createItemInput,
+      user: user,
+    });
     return await this.itemsRepository.save(newItem);
   }
 
