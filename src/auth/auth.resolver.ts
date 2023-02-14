@@ -5,7 +5,7 @@ import { LoginInput, SignupInput } from './dto/inputs/';
 import { AuthResponse } from './types/auth-response.type';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from 'src/users/entities/user.entity';
+import { User } from './../users/entities/user.entity';
 import { ValidRoles } from './enums/valid-roles.enum';
 
 @Resolver(() => AuthResolver)

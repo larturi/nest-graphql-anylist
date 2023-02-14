@@ -5,7 +5,7 @@ import { Item } from './entities/item.entity';
 import { CreateItemInput, UpdateItemInput } from './dto/inputs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Resolver(() => Item)
 @UseGuards(JwtAuthGuard)
