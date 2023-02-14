@@ -28,8 +28,9 @@ export class ItemsResolver {
   @Query(() => Item, { name: 'item' })
   async findOne(
     @Args('id', { type: () => ID }, ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
   ): Promise<Item> {
-    return await this.itemsService.findOne(id);
+    return await this.itemsService.findOne(id, user);
   }
 
   @Mutation(() => Item, { name: 'updateItem' })
@@ -40,7 +41,10 @@ export class ItemsResolver {
   }
 
   @Mutation(() => Item, { name: 'removeItem' })
-  removeItem(@Args('id', { type: () => ID }) id: string): Promise<Item> {
-    return this.itemsService.remove(id);
+  removeItem(
+    @Args('id', { type: () => ID }) id: string,
+    @CurrentUser() user: User,
+  ): Promise<Item> {
+    return this.itemsService.remove(id, user);
   }
 }
