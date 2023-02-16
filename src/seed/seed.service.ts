@@ -5,8 +5,9 @@ import { Item } from '../items/entities/item.entity';
 import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ValidEnviroments } from './enums/valid-enviromente.enum';
-import { SEED_USERS } from './data/seed-data';
+import { SEED_USERS, SEED_ITEMS } from './data/seed-data';
 import { UsersService } from '../users/users.service';
+import { ItemsService } from '../items/items.service';
 
 @Injectable()
 export class SeedService {
@@ -16,6 +17,8 @@ export class SeedService {
     private readonly configService: ConfigService,
 
     private readonly usersService: UsersService,
+
+    private readonly itemsService: ItemsService,
 
     @InjectRepository(Item)
     private readonly itemsRepository: Repository<Item>,
@@ -33,6 +36,8 @@ export class SeedService {
     await this.deleteDatabase();
 
     const user = await this.loadUsers();
+
+    await this.loadItems(user);
 
     return true;
   }
@@ -59,7 +64,16 @@ export class SeedService {
     for (const user of SEED_USERS) {
       users.push(await this.usersService.create(user));
     }
-
     return users[0];
+  }
+
+  async loadItems(user: User): Promise<void> {
+    const itemsPromises = [];
+
+    for (const item of SEED_ITEMS) {
+      itemsPromises.push(await this.itemsService.create(item, user));
+    }
+
+    await Promise.all(itemsPromises);
   }
 }

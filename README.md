@@ -24,16 +24,6 @@ docker-compose up -d
 docker-compose up -d
 ```
 
-### Run the seed to populate the database
-
-#### In src/seed/data/seed-data.ts you can modify the initial data
-
-```bash
-mutation Seed {
-  executeSeed
-}
-```
-
 ### Running the app
 
 ```bash
@@ -43,6 +33,17 @@ yarn start:dev
 ### Open in ApolloGraphQL Studio
 
 <http://localhost:3000/graphql>
+
+
+### Run the seed mutation to populate the database
+
+#### In src/seed/data/seed-data.ts you can modify the initial data
+
+```bash
+mutation Seed {
+  executeSeed
+}
+```
 
 <br/>
 
