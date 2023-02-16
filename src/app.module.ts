@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -35,14 +36,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
 
-    // Asi es para cargarlo de manera sincrona
-    // GraphQLModule.forRoot<ApolloDriverConfig>({
-    //   driver: ApolloDriver,
-    //   autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-    //   playground: false,
-    //   plugins: [ApolloServerPluginLandingPageLocalDefault],
-    // }),
-
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -59,6 +52,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UsersModule,
 
     AuthModule,
+
+    SeedModule,
   ],
   controllers: [],
   providers: [],
