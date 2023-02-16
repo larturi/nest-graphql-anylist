@@ -5,6 +5,8 @@ import { Item } from '../items/entities/item.entity';
 import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ValidEnviroments } from './enums/valid-enviromente.enum';
+import { SEED_USERS } from './data/seed-data';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class SeedService {
@@ -12,6 +14,8 @@ export class SeedService {
 
   constructor(
     private readonly configService: ConfigService,
+
+    private readonly usersService: UsersService,
 
     @InjectRepository(Item)
     private readonly itemsRepository: Repository<Item>,
@@ -27,6 +31,8 @@ export class SeedService {
       throw new UnauthorizedException('We can not run the Seed on Production');
 
     await this.deleteDatabase();
+
+    const user = await this.loadUsers();
 
     return true;
   }
@@ -45,5 +51,15 @@ export class SeedService {
       .delete()
       .where({})
       .execute();
+  }
+
+  async loadUsers(): Promise<User> {
+    const users = [];
+
+    for (const user of SEED_USERS) {
+      users.push(await this.usersService.create(user));
+    }
+
+    return users[0];
   }
 }

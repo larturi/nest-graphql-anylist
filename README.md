@@ -2,7 +2,6 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-
 # AnylistAPI with Nest & GraphQL
 
 # Dev
@@ -23,6 +22,16 @@ docker-compose up -d
 
 ```bash
 docker-compose up -d
+```
+
+### Run the seed to populate the database
+
+#### In src/seed/data/seed-data.ts you can modify the initial data
+
+```bash
+mutation Seed {
+  executeSeed
+}
 ```
 
 ### Running the app
