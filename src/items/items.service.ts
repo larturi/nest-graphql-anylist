@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UpdateItemInput, CreateItemInput } from './dto/inputs';
 import { Item } from './entities/item.entity';
 import { PaginationArgs, SearchArgs } from '../common/dto/args';

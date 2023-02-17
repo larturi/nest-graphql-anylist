@@ -12,6 +12,7 @@ import { SignupInput } from '../auth/dto/inputs/signup.input';
 import { User } from './entities/user.entity';
 import { ValidRoles } from '../auth/enums/valid-roles.enum';
 import { UpdateItemInput } from '../items/dto/inputs';
+import { PaginationArgs, SearchArgs } from '../common/dto/args';
 
 @Injectable()
 export class UsersService {
@@ -34,7 +35,14 @@ export class UsersService {
     }
   }
 
-  async findAll(roles: ValidRoles[]): Promise<User[]> {
+  async findAll(
+    roles: ValidRoles[],
+    paginationArgs: PaginationArgs,
+    searchArgs: SearchArgs,
+  ): Promise<User[]> {
+    const { limit, offset } = paginationArgs;
+    const { search } = searchArgs;
+
     if (roles.length === 0)
       return this.usersRepository.find({
         relations: {
@@ -42,11 +50,20 @@ export class UsersService {
         },
       });
 
-    return this.usersRepository
+    const queryBuilder = this.usersRepository
       .createQueryBuilder()
       .andWhere('ARRAY[roles] && ARRAY[:...roles]')
       .setParameter('roles', roles)
-      .getMany();
+      .limit(limit)
+      .take(offset);
+
+    if (search) {
+      queryBuilder.andWhere('LOWER("fullName") like :fullName', {
+        fullName: `%${search.toLowerCase()}%`,
+      });
+    }
+
+    return await queryBuilder.getMany();
   }
 
   async findOneByEmail(email: string): Promise<User> {
