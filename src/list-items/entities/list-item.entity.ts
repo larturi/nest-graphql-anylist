@@ -1,9 +1,16 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Item } from 'src/items/entities/item.entity';
 import { List } from 'src/lists/entities/list.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity('listItems')
+@Unique('listItem-item', ['list', 'item'])
 @ObjectType()
 export class ListItem {
   @PrimaryGeneratedColumn('uuid')
