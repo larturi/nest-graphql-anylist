@@ -1,29 +1,57 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { List } from 'src/lists/entities/list.entity';
 import { CreateListItemInput } from './dto/create-list-item.input';
-// import { UpdateListItemInput } from './dto/update-list-item.input';
 import { ListItem } from './entities/list-item.entity';
+import { PaginationArgs, SearchArgs } from '../common/dto/args';
 
 @Injectable()
 export class ListItemsService {
   constructor(
     @InjectRepository(ListItem)
-    private readonly ListItemsRepository: Repository<ListItem>,
+    private readonly listItemsRepository: Repository<ListItem>,
   ) {}
 
   async create(createListItemInput: CreateListItemInput): Promise<ListItem> {
     const { itemId, listId, ...rest } = createListItemInput;
-    const newListItem = this.ListItemsRepository.create({
+    const newListItem = this.listItemsRepository.create({
       ...rest,
       item: { id: itemId },
       list: { id: listId },
     });
-    return this.ListItemsRepository.save(newListItem);
+    return this.listItemsRepository.save(newListItem);
   }
 
-  async findAll(): Promise<ListItem[]> {
-    return this.ListItemsRepository.find();
+  async findAll(
+    list: List,
+    paginationArgs: PaginationArgs,
+    searchArgs: SearchArgs,
+  ): Promise<ListItem[]> {
+    const { limit, offset } = paginationArgs;
+    const { search } = searchArgs;
+
+    const queryBuilder = this.listItemsRepository
+      .createQueryBuilder('listItem')
+      .innerJoin('listItem.item', 'item')
+      .take(limit)
+      .skip(offset)
+      .where(`"listId" = :listId`, { listId: list.id });
+
+    if (search) {
+      queryBuilder.andWhere('LOWER(name) like :name', {
+        name: `%${search.toLowerCase()}%`,
+      });
+    }
+
+    return queryBuilder.getMany();
+  }
+
+  async countListItemsByList(list: List): Promise<number> {
+    return this.listItemsRepository.count({
+      where: { list: { id: list.id } },
+    });
   }
 
   // findOne(id: number) {

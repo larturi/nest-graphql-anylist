@@ -42,17 +42,6 @@ export class ItemsService {
     }
 
     return queryBuilder.getMany();
-
-    // return await this.itemsRepository.find({
-    //   take: limit,
-    //   skip: offset,
-    //   where: {
-    //     user: {
-    //       id: user.id,
-    //     },
-    //     name: Like(`%${search.toLowerCase()}%`),
-    //   },
-    // });
   }
 
   async findOne(id: string, user: User): Promise<Item> {
