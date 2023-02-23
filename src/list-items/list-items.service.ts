@@ -6,6 +6,7 @@ import { List } from 'src/lists/entities/list.entity';
 import { CreateListItemInput } from './dto/create-list-item.input';
 import { ListItem } from './entities/list-item.entity';
 import { PaginationArgs, SearchArgs } from '../common/dto/args';
+import { UpdateListItemInput } from './dto/update-list-item.input';
 
 @Injectable()
 export class ListItemsService {
@@ -62,9 +63,23 @@ export class ListItemsService {
     return listItem;
   }
 
-  // update(id: number, updateListItemInput: UpdateListItemInput) {
-  //   return `This action updates a #${id} listItem`;
-  // }
+  async update(
+    id: string,
+    updateListItemInput: UpdateListItemInput,
+  ): Promise<ListItem> {
+    const { listId, itemId, ...rest } = updateListItemInput;
+
+    const listItem = await this.listItemsRepository.preload({
+      ...rest,
+      list: { id: listId },
+      item: { id: itemId },
+    });
+
+    if (!listItem)
+      throw new NotFoundException(`List item with id ${id} not found`);
+
+    return this.listItemsRepository.save(listItem);
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} listItem`;
