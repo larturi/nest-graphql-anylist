@@ -37,9 +37,4 @@ export class ListItemsResolver {
       updateListItemInput,
     );
   }
-
-  // @Mutation(() => ListItem)
-  // removeListItem(@Args('id', { type: () => Int }) id: number) {
-  //   return this.listItemsService.remove(id);
-  // }
 }
