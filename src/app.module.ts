@@ -41,6 +41,13 @@ import { ListItemsModule } from './list-items/list-items.module';
 
     TypeOrmModule.forRoot({
       type: 'postgres',
+      ssl:
+        process.env.STATE === 'prod'
+          ? {
+              rejectUnauthorized: false,
+              sslmode: 'require',
+            }
+          : (false as any),
       host: process.env.POSTGRES_HOST,
       port: +process.env.POSTGRES_PORT,
       username: process.env.POSTGRES_USER,
@@ -67,4 +74,16 @@ import { ListItemsModule } from './list-items/list-items.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('\nCargando variables de entorno:');
+    console.log('-----------------------------');
+    console.log('stage:', process.env.STATE);
+    console.log('host:', process.env.POSTGRES_HOST);
+    console.log('port:', +process.env.POSTGRES_PORT);
+    console.log('username:', process.env.POSTGRES_USER);
+    console.log('password:', process.env.POSTGRES_PASSWORD);
+    console.log('database:', process.env.POSTGRES_NAME);
+    console.log('\n');
+  }
+}
