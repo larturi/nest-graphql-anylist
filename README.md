@@ -41,6 +41,36 @@ mutation Seed {
 }
 ```
 
+# Docker Prod
+
+#### Build
+```bash
+docker-compose -f docker-compose.prod.yml --env-file .env.prod up --build
+```
+
+#### Run
+```bash
+docker-compose -f docker-compose.prod.yml --env-file .env.prod up
+```
+
+#### Nota
+Por defecto, docker-compose usa el archivo .env, por lo que si tienen el archivo .env y lo configuran con sus variables de entorno de producción, bastaría con
+
+```bash
+docker-compose -f docker-compose.prod.yml up --build
+```
+
+#### Cambiar nombre
+```bash
+docker tag <nombre app> <usuario docker hub>/<nombre repositorio>
+Ingresar a Docker Hub
+
+docker login
+Subir imagen
+
+docker push <usuario docker hub>/<nombre repositorio>
+```
+
 <br/>
 
 ---
