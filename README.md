@@ -14,10 +14,6 @@ yarn install
 
 ### Create .env file with .env.template as a template
 
-```bash
-docker-compose up -d
-```
-
 ### Run Docker Container with PostgresDB Image
 
 ```bash
