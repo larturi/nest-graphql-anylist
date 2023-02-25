@@ -45,12 +45,12 @@ mutation Seed {
 
 #### Build
 ```bash
-docker-compose -f docker-compose.prod.yml --env-file .env.prod up --build
+docker-compose -f docker-compose.prod.yml up --build
 ```
 
 #### Run
 ```bash
-docker-compose -f docker-compose.prod.yml --env-file .env.prod up
+docker-compose -f docker-compose.prod.yml up
 ```
 
 #### Nota

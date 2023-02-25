@@ -28,14 +28,6 @@ import { ListItemsModule } from './list-items/list-items.module';
         playground: false,
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         plugins: [ApolloServerPluginLandingPageLocalDefault],
-        context({ req }) {
-          // Con estas validaciones solo puede ver los metodos si se esta autenticado
-          // pero choca con los metodos login y signup que deberian ser publicos
-          // const token = req.headers.authorization?.replace('Bearer ', '');
-          // if (!token) throw Error('Token needed');
-          // const payload = jwtService.decode(token);
-          // if (!payload) throw Error('Token needed');
-        },
       }),
     }),
 
