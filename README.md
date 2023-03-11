@@ -28,7 +28,7 @@ yarn start:dev
 
 ### Open in ApolloGraphQL Studio
 
-<http://localhost:3000/graphql>
+<http://localhost:4000/graphql>
 
 
 ### Run the seed mutation to populate the database
