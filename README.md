@@ -41,6 +41,45 @@ mutation Seed {
 }
 ```
 
+#### Login
+
+```bash
+mutation Mutation($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    user {
+      email
+      fullName
+      isActive
+      roles
+    }
+    token
+  }
+}
+
+# Variables
+{
+  "loginInput": {
+    "email": "leandro@email.com",
+    "password": "123456"
+  }
+}
+```
+
+#### List of items
+
+```bash
+query Items {
+  items {
+    name
+    id
+    quantityUnits
+  }
+}
+
+# Headers
+Authorization Bearer <Token>
+```
+
 # Docker Prod
 
 #### Build
